@@ -1,8 +1,67 @@
-import { useState, useEffect } from 'react';
-import { searchGithub, searchGithubUser } from '../api/API';
+import { useEffect, useState } from "react";
+//import CandidateCard from "../components/CandidateCard"; 
+import Candidate from "../interfaces/Candidate.interface";
+import CandidateCard from "../components/CanididateCard.tsx";
+import { searchGithub, searchGithubUser } from "../api/API.tsx";
+
+const getStoredCandidates = (): Candidate[] => {
+  try {
+    return JSON.parse(localStorage.getItem("potentialCandidates") || "[]");
+  } catch {
+    return [];
+  }
+};
 
 const CandidateSearch = () => {
-  return <h1>CandidateSearch</h1>;
+  const [candidate, setCandidate] = useState<Candidate>();
+
+  const fetchCandidate = async () => {
+     searchGithub().then((data) => {
+      const username= data[0].login;
+      searchGithubUser(username).then((data) => {
+        console.log(data);
+        setCandidate(data);
+      });
+    });
+  };
+
+  useEffect(
+     function()  {
+   (async () => {
+
+      await fetchCandidate();
+      })()
+    }, []
+  );
+
+  const handleAccept = () => {
+    const savedCandidates= getStoredCandidates();
+    
+    //  add canidate to list of saved candidates
+    if (candidate) {
+      savedCandidates.push(candidate);
+    }
+    localStorage.setItem("potentialCandidates", JSON.stringify(savedCandidates));
+
+    // get another conidate 
+
+    
+    
+  };
+  const handleReject = () => {
+    // get another candidate
+
+    
+  };
+
+  return (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-4">Candidate Search</h1>
+      
+        <CandidateCard candidate={candidate} onAccept={handleAccept} onReject={handleReject} />
+      
+    </div>
+  );
 };
 
 export default CandidateSearch;
