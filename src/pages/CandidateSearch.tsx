@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-//import CandidateCard from "../components/CandidateCard"; 
 import Candidate from "../interfaces/Candidate.interface";
 import CandidateCard from "../components/CanididateCard.tsx";
 import { searchGithub, searchGithubUser } from "../api/API.tsx";
@@ -13,7 +12,15 @@ const getStoredCandidates = (): Candidate[] => {
 };
 
 const CandidateSearch = () => {
-  const [candidate, setCandidate] = useState<Candidate>();
+  const [candidate, setCandidate] = useState<Candidate>( {
+    name: "",
+    login: "",
+    location: "",
+    avatar_url: "",
+    email: "",
+    html_url: "",
+    company: "",
+  });
 
   const fetchCandidate = async () => {
      searchGithub().then((data) => {
