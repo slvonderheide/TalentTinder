@@ -12,7 +12,7 @@ const getStoredCandidates = (): Candidate[] => {
 };
 
 const CandidateSearch = () => {
-  const [candidate, setCandidate] = useState<Candidate>( {
+  const [candidate, setCandidate] = useState<Candidate>({
     name: "",
     login: "",
     location: "",
@@ -23,8 +23,8 @@ const CandidateSearch = () => {
   });
 
   const fetchCandidate = async () => {
-     searchGithub().then((data) => {
-      const username= data[0].login;
+    searchGithub().then((data) => {
+      const username = data[0].login;
       searchGithubUser(username).then((data) => {
         console.log(data);
         setCandidate(data);
@@ -32,41 +32,41 @@ const CandidateSearch = () => {
     });
   };
 
-  useEffect(
-     function()  {
-   (async () => {
-
+  useEffect(function () {
+    (async () => {
       await fetchCandidate();
-      })()
-    }, []
-  );
+    })();
+  }, []);
 
   const handleAccept = () => {
-    const savedCandidates= getStoredCandidates();
-    
-    //  add canidate to list of saved candidates
-    if (candidate) {
-      savedCandidates.push(candidate);
+    if (!candidate) {
+      return;
     }
-    localStorage.setItem("potentialCandidates", JSON.stringify(savedCandidates));
-
-    // get another conidate 
-
-    
-    
+    const savedCandidates = getStoredCandidates();
+    savedCandidates.push(candidate);
+    localStorage.setItem(
+      "potentialCandidates",
+      JSON.stringify(savedCandidates)
+    );
+    fetchCandidate();
   };
-  const handleReject = () => {
-    // get another candidate
 
-    
+  const handleReject = () => {
+    fetchCandidate(); // Get the next candidate
   };
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Candidate Search</h1>
-      
-        <CandidateCard candidate={candidate} onAccept={handleAccept} onReject={handleReject} />
-      
+      {candidate ? (
+        <CandidateCard
+          candidate={candidate}
+          onAccept={handleAccept}
+          onReject={handleReject}
+        />
+      ) : (
+        <p>Loading candidate...</p>
+      )}
     </div>
   );
 };

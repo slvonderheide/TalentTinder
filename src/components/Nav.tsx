@@ -8,13 +8,7 @@ const Nav = () => {
           <Link to="/" className="hover:text-gray-400">Home</Link>
         </li>
         <li>
-          <Link to="/about" className="hover:text-gray-400">About</Link>
-        </li>
-        <li>
-          <Link to="/contact" className="hover:text-gray-400">Contact</Link>
-        </li>
-        <li>
-          <Link to="/login" className="hover:text-gray-400">Login</Link>
+          <Link to="/SavedCandidates" className="hover:text-gray-400">Potential Candidates</Link>
         </li>
       </ul>
     </nav>
