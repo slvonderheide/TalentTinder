@@ -9,5 +9,6 @@ export default defineConfig({
     host: true, // Expose on 0.0.0.0
     port: process.env.PORT ? Number(process.env.PORT) : 5173, // Use PORT from Render or default to 5173
     strictPort: true, // Ensures Vite fails if the port is unavailable
+    allowedHosts: ['talenttinder.onrender.com'],
   }
 });
